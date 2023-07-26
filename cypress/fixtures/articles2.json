@@ -1,0 +1,32 @@
+{
+  "article": {
+    "id": 318808,
+    "slug": "This-idads-tdasdasdhe-title2-dasda-ds-1850",
+    "title": "This idads tdasdasdhe title2 dasda ds",
+    "description": "This is the description",
+    "body": "This is a body of the article",
+    "createdAt": "2023-07-26T11:07:24.969Z",
+    "updatedAt": "2023-07-26T11:07:24.969Z",
+    "authorId": 1850,
+    "tagList": [],
+    "author": {
+      "username": "CyTestUser",
+      "bio": "2222",
+      "image": "https://i.stack.imgur.com/34AD2.jpg",
+      "following": false
+    },
+    "favoritedBy": [
+      {
+        "id": 1850,
+        "email": "artem.bondar16@gmail.com",
+        "username": "CyTestUser",
+        "password": "$2a$10$Ha61ZsnLtukQMADlw7WBt.iCSWOseepHG932J7kIXkD1sEw9u5pwG",
+        "image": "https://i.stack.imgur.com/34AD2.jpg",
+        "bio": "2222",
+        "demo": false
+      }
+    ],
+    "favorited": true,
+    "favoritesCount": 1
+  }
+}
