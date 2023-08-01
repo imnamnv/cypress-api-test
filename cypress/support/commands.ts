@@ -37,8 +37,31 @@
 // }
 
 Cypress.Commands.add('loginToApplication' as any, ()=>{
-    cy.visit('/login');
-    cy.get('[placeholder="Email"]' as any).type('artem.bondar16@gmail.com')
-    cy.get('[placeholder="Password"]' as any).type('CypressTest1')
-    cy.get('form' as any).submit()
+   
+    // WAY 1 LOGIN
+    // cy.visit('/login');
+    // cy.get('[placeholder="Email"]' as any).type('artem.bondar16@gmail.com')
+    // cy.get('[placeholder="Password"]' as any).type('CypressTest1')
+    // cy.get('form' as any).submit()
+
+
+    // WAY 2 LOGIN
+    const user = {
+        user: {
+          email: "artem.bondar16@gmail.com",
+          password: "CypressTest1",
+        },
+      };
+      
+      cy.request("POST", "https://api.realworld.io/api/users/login", user)
+      .its("body")
+      .then((body) => {
+        const token = body.user.token;
+        cy.wrap(token).as('token') // save the data and can reuse it later like @token (alias)
+        cy.visit('/',{
+            onBeforeLoad(win){
+                win.localStorage.setItem('jwtToken',token) // save token and in code we use this token
+            }
+        })
+      })
 })
