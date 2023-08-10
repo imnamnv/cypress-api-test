@@ -8,7 +8,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint --force",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cy:open_process": "npx cypress open --env username=$DB_USERNAME,password=$PASSWORD",
+    "cy:run_spec": "npx cypress run --spec 'cypress/e2e/firstTest.spect.js' --browser chrome --headed"
   },
   "engines": {
     "node": "^14.20.0 || ^16.13.0 || ^18.10.0"

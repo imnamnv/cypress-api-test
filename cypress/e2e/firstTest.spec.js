@@ -181,59 +181,68 @@ describe("test with backend", () => {
       });
   });
 
-  it.only("WAY 2 LOGIN: delete a new article in a global feed", () => {
-    cy.intercept("get", "https://api.realworld.io/api/articles*").as(
-      "getArticles"
-    );
+  it.only(
+    "WAY 2 LOGIN: delete a new article in a global feed",
+    {
+      retries: 2, // retries 2 times when error
+      browser: "chrome", // run pnly with chrome
+    },
+    () => {
+      cy.intercept("get", "https://api.realworld.io/api/articles*").as(
+        "getArticles"
+      );
 
-    const user = {
-      user: {
-        email: "artem.bondar16@gmail.com",
-        password: "CypressTest1",
-      },
-    };
-
-    const bodyRequest = {
-      article: {
-        tagList: [],
-        title: "Request from API from Nam",
-        description: "API testing is easy",
-        body: "Angular is cool",
-      },
-    };
-
-    cy.get("@token").then((token) => {
-      cy.request({
-        url: "https://api.realworld.io/api/articles/",
-        headers: {
-          Authorization: "Token " + token,
+      const user = {
+        user: {
+          email: "artem.bondar16@gmail.com",
+          password: "CypressTest1",
         },
-        method: "POST",
-        body: bodyRequest,
-      }).then((response) => {
-        console.log("response", response);
-        expect(response.status).to.equal(201);
-      });
+      };
 
-      cy.contains("Global Feed").click();
-
-      cy.wait("@getArticles").then((xhr) => {
-        cy.get(".article-preview").first().click();
-        cy.get(".article-actions").contains("Delete Article").click();
-      });
-
-      cy.request({
-        url: "https://api.realworld.io/api/articles?limit=10&offset=0",
-        headers: {
-          Authorization: "Token " + token,
+      const bodyRequest = {
+        article: {
+          tagList: [],
+          title: "Request from API from Nam",
+          description: "API testing is easy",
+          body: "Angular is cool",
         },
-        method: "GET",
-      })
-        .its("body")
-        .then((body) => {
-          console.log("body", body);
-          expect(body.articles[0].title).not.equal("Request from API from Nam");
+      };
+
+      cy.get("@token").then((token) => {
+        cy.request({
+          url: Cypress.env("apiUrl") + "/api/articles/",
+          headers: {
+            Authorization: "Token " + token,
+          },
+          method: "POST",
+          body: bodyRequest,
+        }).then((response) => {
+          console.log("response", response);
+          expect(response.status).to.equal(201);
         });
-    });
-  });
+
+        cy.contains("Global Feed").click();
+
+        cy.wait("@getArticles").then((xhr) => {
+          cy.get(".article-preview").first().click();
+          cy.get(".article-actions").contains("Delete Article").click();
+        });
+
+        cy.request({
+          url: "https://api.realworld.io/api/articles?limit=10&offset=0",
+          headers: {
+            Authorization: "Token " + token,
+          },
+          method: "GET",
+        })
+          .its("body")
+          .then((body) => {
+            console.log("body", body);
+            expect(body.articles[0].title).not.equal(
+              "Request from API from Nam"
+            );
+          });
+      });
+    }
+  );
 });
